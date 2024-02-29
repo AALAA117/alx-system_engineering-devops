@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#show only listining sockets and pid/name to each socket
+netstat -lp
