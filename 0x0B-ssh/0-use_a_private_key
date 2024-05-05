@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-ssh -i ~/.ssh/school ubuntu@3.85.41.198
+#mv /root/.ssh/id_rsa ~/.ssh/school
+ssh -i ~/.ssh/school ubuntu@34.204.82.115
