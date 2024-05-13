@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 # Check if the configuration is already applied on both servers
 sudo apt-get -y update
-apt-get -y install --no-install-recommends software-properties-common
-add-apt-repository ppa:vbernat/haproxy-2.0
-apt-get install haproxy=2.0.\*
+apt-get -y install haproxy
 
 # Configure HAProxy to send traffic to web-01 and web-02
 TEMP_CONFIG="/tmp/new_haproxy_config"
