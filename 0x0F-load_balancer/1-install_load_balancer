@@ -1,27 +1,26 @@
 #!/usr/bin/env bash
-
 # Check if the configuration is already applied on both servers
-if ! grep -q "server 526434-web-01 34.204.82.115:80 check" /etc/haproxy/haproxy.cfg || ! grep -q "server 526434-web-02 3.83.227.236:80 check" /etc/haproxy/haproxy.cfg; then
-    # Install and configure HAProxy on your lb-01 server
-    apt-get -y install --no-install-recommends software-properties-common
-    add-apt-repository ppa:vbernat/haproxy-2.6
-    apt-get install haproxy=2.6.*
+sudo apt-get -y update
+apt-get -y install --no-install-recommends software-properties-common
+add-apt-repository ppa:vbernat/haproxy-2.0
+apt-get install haproxy=2.0.\*
 
-    # Configure HAProxy to send traffic to web-01 and web-02
-    echo '
-    frontend http_front
-        bind *:80
-        default_backend http_back
-        timeout client 30s
+# Configure HAProxy to send traffic to web-01 and web-02
+TEMP_CONFIG="/tmp/new_haproxy_config"
+cat << EOF > $TEMP_CONFIG
+frontend http_front
+    bind *:80
+    default_backend http_back
+    timeout client 30s
 
-    backend http_back
-        balance roundrobin
-        server 526434-web-01 34.204.82.115:80 check
-        server 526434-web-02 3.83.227.236:80 check
-        timeout server 30s
-        timeout connect 5s
-    ' >> /etc/haproxy/haproxy.cfg
-
-    # Restart HAProxy
-    sudo systemctl restart haproxy
-fi
+backend http_back
+    balance roundrobin
+    server 526434-web-01 34.204.82.115:80 check
+    server 526434-web-02 3.83.227.236:80 check
+    timeout server 30s
+    timeout connect 5s
+EOF
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+sudo mv $TEMP_CONFIG /etc/haproxy/haproxy.cfg
+sudo systemctl enable haproxy
+sudo systemctl restart haproxy
