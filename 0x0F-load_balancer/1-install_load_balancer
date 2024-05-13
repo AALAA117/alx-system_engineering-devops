@@ -20,5 +20,6 @@ backend http_back
 EOF
 sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
 sudo mv $TEMP_CONFIG /etc/haproxy/haproxy.cfg
+sudo systemctl daemon-reload
 sudo systemctl enable haproxy
-sudo systemctl restart haproxy
+sudo systemctl reload haproxy
