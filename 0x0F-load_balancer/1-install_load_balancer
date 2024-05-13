@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#Install and configure HAproxy on your lb-01 server.
+apt-get -y install --no-install-recommends software-properties-common
+add-apt-repository ppa:vbernat/haproxy-2.6
+apt-get install haproxy=2.6.\*
+
+#Configure HAproxy so that it send traffic to web-01 and web-02
+cat <<EOF > /etc/haproxy/haproxy.cfg
+frontend http_front
+    bind *:80
+    default_backend http_back
+    timeout client 30s
+
+backend http_back
+    balance roundrobin
+    server 526434-web-01 34.204.82.115:80 check
+    server 526434-web-02 3.83.227.236:80 check
+    timeout server 30s
+    timeout connect 5s
+EOF
+if systemctl is-active --quiet haproxy; then
+    sudo systemctl restart haproxy
+else
+    sudo systemctl start haproxy
+fi
