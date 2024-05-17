@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#Configure your domain zone so that the subdomain www points to your load-balancer IP (lb-01)
+func ()
+{
+	record_type=$(dig +noall +answer "$2.$1" | awk '{print $4}')
+	ip=$(dig +short "$2.$1")
+	awk -v var="$2" -v rtype="$record_type" -v des="$ip" 'BEGIN { printf "The subdomain %s is a %s record and points to %s\n", var, rtype, des }'
+}
+if [ $# -eq 1 ]; then
+	func "$1" "www"
+	func "$1" "lb-01"
+	func "$1" "web-01"
+	func "$1" "web-02"
+elif [ $# -eq 2 ]; then
+	func "$1" "$2"
+fi
