@@ -3,6 +3,7 @@
 script that, using this REST API, for a given employee ID,
 returns information about his/her TODO list progress
 """
+import json
 import requests
 from sys import argv
 
@@ -31,8 +32,9 @@ def get_employee():
                 }
         list_tasks.append(dic_tasks)
 
+    dic = {employee_id: list_tasks}
     with open(json_filename, "w") as f:
-        f.write("{}".format(dict([(employee_id, list_tasks)])))
+        json.dump(dic, f)
 
 
 if __name__ == "__main__":
