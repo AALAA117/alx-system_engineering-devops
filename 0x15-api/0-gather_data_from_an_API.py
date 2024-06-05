@@ -27,7 +27,7 @@ def get_employee():
             done_tasks += 1
             list_dtasks.append(task)
 
-    print("Employee {} is done with tasks({}/{})"
+    print("Employee {} is done with tasks({}/{}):"
           .format(employee_name, done_tasks, len(tasks)))
 
     for task in list_dtasks:
