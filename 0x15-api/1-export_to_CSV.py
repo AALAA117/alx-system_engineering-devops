@@ -14,7 +14,7 @@ def get_employee():
             "https://jsonplaceholder.typicode.com/users/{}"
             .format(employee_id)
             )
-    employee_name = requests.get(main_url).json().get('name')
+    username = requests.get(main_url).json().get('username')
     tasks_url = (
             "https://jsonplaceholder.typicode.com/users/{}/todos"
             .format(employee_id)
@@ -30,8 +30,8 @@ def get_employee():
 
     with open(csv_filename, "w") as f:
         for task in tasks:
-            f.write('"{}", "{}", "{}", "{}"\n'
-                    .format(employee_id, employee_name,
+            f.write('"{}","{}","{}","{}"\n'
+                    .format(employee_id, username,
                             task["completed"], task["title"])
                     )
 
