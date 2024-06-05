@@ -12,13 +12,13 @@ def get_employee():
     """returns information about his/her TODO list progress"""
     i = 1
     main_url = "https://jsonplaceholder.typicode.com/users"
+    tasks_url = "https://jsonplaceholder.typicode.com/todos"
+    tasks = requests.get(tasks_url).json()
     data = requests.get(main_url).json()
-    list_tasks = []
     dictionary = {}
     json_filename = "todo_all_employees.json"
     for a_dic in data:
-        tasks_url = "https://jsonplaceholder.typicode.com/todos"
-        tasks = requests.get(tasks_url).json()
+        list_tasks = []
         username = a_dic["username"]
         for task in tasks:
             user_id = task["userId"]
@@ -29,7 +29,7 @@ def get_employee():
                         "task": task["title"]
                         }
                 list_tasks.append(dic_tasks)
-                dictionary[str(i)] = list_tasks
+        dictionary[str(i)] = list_tasks
         i += 1
 
     with open(json_filename, "w") as f:
